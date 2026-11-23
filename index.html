@@ -407,7 +407,8 @@
       text-align: center;
       padding: 2rem 1rem;
       color: var(--muted);
-      font-size: 0.85rem;
+      font-size: 0.9rem;
+      font-style: italic;
       border-top: 1px solid var(--border);
     }
   </style>
@@ -457,7 +458,7 @@
   </main>
 
   <footer>
-    Built to promote clarity, mutual understanding, and authentic scholarship. Add or edit entries directly in the script data array.
+    <p id="footerDua"></p>
   </footer>
 
   <script>
@@ -699,13 +700,38 @@
     ];
 
     // ==========================================
-    // 4. APP LOGIC (TABS, THEME, FAQ, DA'WAH, TRIVIA)
+    // 4. DATA: ROTATING FOOTER DU'A LIST
+    // ==========================================
+    const footerDuas = [
+      "O Allah, grant us beneficial knowledge, sincere action, and steady clarity of heart.",
+      "O Allah, guide us to what is right, strengthen our patience, and fill our days with calm and purpose.",
+      "O Allah, make truth clear to us and help us follow it, and make falsehood clear to us and help us avoid it.",
+      "O Allah, protect us from harmful habits, soften our character, and place blessing in our time and effort.",
+      "O Allah, ease what feels difficult, grant wisdom in every decision, and keep our intentions pure."
+    ];
+
+    let lastDuaIndex = -1;
+
+    // ==========================================
+    // 5. APP LOGIC (TABS, THEME, FAQ, DA'WAH, TRIVIA, DU'A)
     // ==========================================
     let selectedCategory = "All";
     let selectedDawahCategory = "All";
     let currentQuestion = 0;
     let score = 0;
     let answered = false;
+
+    function renderFooterDua() {
+      const duaEl = document.getElementById("footerDua");
+      if (!duaEl || !footerDuas.length) return;
+
+      let nextIndex = Math.floor(Math.random() * footerDuas.length);
+      if (footerDuas.length > 1 && nextIndex === lastDuaIndex) {
+        nextIndex = (nextIndex + 1) % footerDuas.length;
+      }
+      lastDuaIndex = nextIndex;
+      duaEl.textContent = footerDuas[nextIndex];
+    }
 
     function toggleTheme() {
       const body = document.body;
@@ -721,6 +747,8 @@
 
       document.querySelectorAll(".section").forEach(s => s.classList.remove("active"));
       document.getElementById(`${tabName}-section`).classList.add("active");
+
+      renderFooterDua();
     }
 
     function renderCategoryPills() {
@@ -936,6 +964,7 @@
     renderDawahCategoryPills();
     renderDawah();
     renderTrivia();
+    renderFooterDua();
   </script>
 </body>
 </html>
