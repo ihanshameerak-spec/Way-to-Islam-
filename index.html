@@ -224,3 +224,502 @@
       letter-spacing: 0.04em;
       padding: 0.2rem 0.6rem;
       border-radius: 6px;
+      background: var(--primary-soft);
+      color: var(--primary);
+      margin-bottom: 0.4rem;
+    }
+
+    .myth-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 0.4rem;
+    }
+
+    .quick-answer {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .toggle-icon {
+      font-size: 1.25rem;
+      font-weight: bold;
+      color: var(--primary);
+      user-select: none;
+    }
+
+    .evidence-box {
+      display: none;
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .faq-card.open .evidence-box {
+      display: block;
+    }
+
+    .evidence-block {
+      background: var(--bg);
+      border-left: 3px solid var(--primary);
+      padding: 0.85rem 1rem;
+      border-radius: 0 8px 8px 0;
+      margin-bottom: 0.75rem;
+    }
+
+    .evidence-label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--primary);
+      text-transform: uppercase;
+      margin-bottom: 0.25rem;
+    }
+
+    .evidence-text {
+      font-style: italic;
+      margin-bottom: 0.3rem;
+    }
+
+    .evidence-ref {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--accent);
+    }
+
+    .context-note {
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin-top: 0.5rem;
+    }
+
+    /* Trivia Section */
+    .trivia-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.75rem;
+      box-shadow: var(--shadow);
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    .trivia-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.25rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--muted);
+    }
+
+    .question-text {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 1.25rem;
+    }
+
+    .options-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .option-btn {
+      text-align: left;
+      padding: 0.9rem 1.1rem;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text);
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .option-btn:hover:not(:disabled) {
+      border-color: var(--primary);
+    }
+
+    .option-btn.correct {
+      background: var(--correct-bg);
+      color: var(--correct-text);
+      border-color: var(--correct-text);
+      font-weight: 600;
+    }
+
+    .option-btn.wrong {
+      background: var(--wrong-bg);
+      color: var(--wrong-text);
+      border-color: var(--wrong-text);
+    }
+
+    .explanation-panel {
+      display: none;
+      margin-top: 1.25rem;
+      padding: 1rem;
+      border-radius: 10px;
+      background: var(--primary-soft);
+      color: var(--text);
+    }
+
+    .explanation-panel.show {
+      display: block;
+    }
+
+    .next-btn {
+      margin-top: 1.25rem;
+      padding: 0.75rem 1.5rem;
+      background: var(--primary);
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: none;
+    }
+
+    [data-theme="dark"] .next-btn {
+      color: #0b1120;
+    }
+
+    .next-btn.show {
+      display: inline-block;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 2rem;
+      color: var(--muted);
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem 1rem;
+      color: var(--muted);
+      font-size: 0.85rem;
+      border-top: 1px solid var(--border);
+    }
+  </style>
+</head>
+<body data-theme="light">
+
+  <header>
+    <div class="nav-container">
+      <div class="brand">Clarifying Islam</div>
+      <div class="nav-controls">
+        <button class="tab-btn active" onclick="switchTab('faq', this)">Misconceptions FAQ</button>
+        <button class="tab-btn" onclick="switchTab('trivia', this)">Knowledge Trivia</button>
+        <button class="theme-btn" id="themeToggle" onclick="toggleTheme()">Dark Mode</button>
+      </div>
+    </div>
+  </header>
+
+  <section class="hero">
+    <h1>Explore Authentic Islamic Teachings</h1>
+    <p>Clear, evidence-based answers to common questions using the Qur'an and authentic Sunnah, paired with an interactive trivia quiz.</p>
+  </section>
+
+  <main>
+    <!-- FAQ SECTION -->
+    <div id="faq-section" class="section active">
+      <div class="controls-bar">
+        <input type="text" id="searchInput" class="search-input" placeholder="Search misconceptions (e.g., women, science, charity, Jesus)..." oninput="renderFAQs()" />
+        <div class="filter-pills" id="categoryPills"></div>
+      </div>
+      <div class="faq-list" id="faqList"></div>
+    </div>
+
+    <!-- TRIVIA SECTION -->
+    <div id="trivia-section" class="section">
+      <div class="trivia-card" id="triviaContainer"></div>
+    </div>
+  </main>
+
+  <footer>
+    Built to promote clarity, mutual understanding, and authentic scholarship. Add or edit entries directly in the script data array.
+  </footer>
+
+  <script>
+    // ==========================================
+    // 1. DATA: ADD OR EDIT MISCONCEPTIONS HERE
+    // ==========================================
+    const faqData = [
+      {
+        category: "Beliefs & Prophets",
+        myth: "Do Muslims worship a different God than Jews and Christians?",
+        summary: "No. 'Allah' is simply the Arabic word for God—the same One God of Abraham, Moses, and Jesus. Arabic-speaking Christians and Jews also use the word 'Allah' in their Bibles and prayers.",
+        quran: {
+          text: "Say, 'We have believed in Allah and in what was revealed to us and what was revealed to Abraham, Ishmael, Isaac, Jacob, and the Descendants, and in what was given to Moses and Jesus and to the prophets from their Lord. We make no distinction between any of them, and we are Muslims [submitting] to Him.'",
+          ref: "Qur'an 3:84"
+        },
+        hadith: {
+          text: "The Prophet (peace be upon him) said: 'Both in this world and in the Hereafter, I am the nearest of all the people to Jesus, the son of Mary. The prophets are paternal brothers; their mothers are different, but their religion is one.'",
+          ref: "Sahih al-Bukhari 3443"
+        },
+        context: "Linguistically, 'Allah' comes from 'Al-Ilah' (The God), sharing the same Semitic root as the Hebrew 'Elohim' and Aramaic 'Elaha'."
+      },
+      {
+        category: "Women & Family",
+        myth: "Does Islam deny women financial independence and property rights?",
+        summary: "No. Over 1,400 years ago, Islam granted women the independent legal right to own property, inherit wealth, earn money, and keep 100% of their income without obligation to spend it on household expenses.",
+        quran: {
+          text: "For men is a share of what the parents and close relatives leave, and for women is a share of what the parents and close relatives leave, be it little or much—an obligatory share.",
+          ref: "Qur'an 4:7"
+        },
+        hadith: {
+          text: "The Prophet (peace be upon him) emphasized honoring and caring for daughters and wives, stating: 'The best of you are those who are best to their wives.'",
+          ref: "Jami` at-Tirmidhi 1162 (Hasan Sahih)"
+        },
+        context: "Many restrictive practices seen in certain regions stem from local cultural traditions rather than Islamic scripture."
+      },
+      {
+        category: "Terminology",
+        myth: "Does the Arabic word 'Jihad' translate to 'Holy War'?",
+        summary: "No. 'Jihad' literally means 'striving' or 'struggling' in a noble cause. In Islamic teachings, its primary form is the internal spiritual struggle to improve one's character, resist temptation, and serve humanity.",
+        quran: {
+          text: "And those who strive for Us—We will surely guide them to Our ways. And indeed, Allah is with the doers of good.",
+          ref: "Qur'an 29:69"
+        },
+        hadith: {
+          text: "A man asked the Prophet (peace be upon him), 'What kind of Jihad is best?' He replied: 'A word of truth spoken in front of an unjust ruler.'",
+          ref: "Sunan an-Nasa'i 4209 (Sahih)"
+        },
+        context: "The Arabic phrase for 'holy war' is 'Al-Harb Al-Muqaddasah,' which never appears anywhere in the Qur'an or Hadith."
+      },
+      {
+        category: "Social Justice",
+        myth: "Does Islam encourage compulsion in religion?",
+        summary: "No. Faith in Islam is only valid when accepted sincerely and voluntarily. Forced conversion is explicitly prohibited in the Qur'an.",
+        quran: {
+          text: "There shall be no compulsion in [acceptance of] the religion. The right course has become clear from the wrong.",
+          ref: "Qur'an 2:256"
+        },
+        hadith: {
+          text: "The Prophet (peace be upon him) established treaties protecting the religious freedom, churches, and synagogues of non-Muslim citizens living under Muslim governance.",
+          ref: "Historical Covenants & Sunan Abi Dawud 3052"
+        },
+        context: "Throughout history, diverse religious communities coexisted for centuries in regions such as Al-Andalus (Spain), Baghdad, and the Levant."
+      },
+      {
+        category: "Science & Knowledge",
+        myth: "Is Islam opposed to scientific inquiry and reason?",
+        summary: "No. Seeking knowledge is a religious obligation in Islam, and the Qur'an repeatedly urges humanity to observe, reflect upon, and study the natural universe.",
+        quran: {
+          text: "Indeed, in the creation of the heavens and the earth and the alternation of the night and the day are signs for those of understanding.",
+          ref: "Qur'an 3:190"
+        },
+        hadith: {
+          text: "The Prophet (peace be upon him) said: 'Seeking knowledge is an obligation upon every Muslim.'",
+          ref: "Sunan Ibn Majah 224 (Sahih)"
+        },
+        context: "This principle inspired the Islamic Golden Age, producing foundational breakthroughs in algebra (Al-Khwarizmi), optics (Ibn al-Haytham), and medicine (Ibn Sina)."
+      }
+    ];
+
+    // ==========================================
+    // 2. DATA: ADD OR EDIT TRIVIA QUESTIONS HERE
+    // ==========================================
+    const triviaData = [
+      {
+        question: "Which prophet is mentioned by name the most times in the Qur'an?",
+        options: ["Prophet Muhammad (peace be upon him)", "Prophet Moses / Musa (peace be upon him)", "Prophet Abraham / Ibrahim (peace be upon him)", "Prophet Noah / Nuh (peace be upon him)"],
+        answer: 1,
+        explanation: "Prophet Moses (Musa, peace be upon him) is mentioned by name over 130 times in the Qur'an, highlighting the shared heritage between Abrahamic faiths."
+      },
+      {
+        question: "What does the Arabic word 'Islam' literally mean?",
+        options: ["Peaceful submission to the will of God", "A geographic region", "A specific tribe", "Ancient law"],
+        answer: 0,
+        explanation: "'Islam' comes from the root letters S-L-M, which relate to peace, purity, and voluntary submission to the Creator."
+      },
+      {
+        question: "According to authentic Hadith, what did the Prophet (peace be upon him) say about removing a harmful obstacle from a road?",
+        options: ["It has no spiritual reward", "It is a branch of faith and an act of charity", "Only officials should do it", "It only counts on Fridays"],
+        answer: 1,
+        explanation: "In Sahih Muslim (35), the Prophet (peace be upon him) taught that removing harmful things from the path is one of the branches of faith (Iman) and counts as charity (Sadaqah)."
+      },
+      {
+        question: "Who founded the world's oldest continuously operating degree-granting university (Al-Qarawiyyin) in 859 CE?",
+        options: ["Fatima al-Fihri", "Ibn Battuta", "Al-Khwarizmi", "Salahuddin"],
+        answer: 0,
+        explanation: "Fatima al-Fihri, a Muslim woman in Fez, Morocco, used her inheritance to establish the Al-Qarawiyyin mosque and educational institution in 859 CE."
+      },
+      {
+        question: "Which chapter of the Qur'an is named after Mary, the mother of Jesus?",
+        options: ["Surah Al-Baqarah", "Surah Maryam (Chapter 19)", "Surah Al-Ikhlas", "Surah Yusuf"],
+        answer: 1,
+        explanation: "Surah Maryam (Chapter 19) is named in honor of Mary (Maryam), who is revered in Islam as one of the purest and most righteous women in human history."
+      }
+    ];
+
+    // ==========================================
+    // 3. APP LOGIC (TABS, THEME, FAQ, TRIVIA)
+    // ==========================================
+    let selectedCategory = "All";
+    let currentQuestion = 0;
+    let score = 0;
+    let answered = false;
+
+    function toggleTheme() {
+      const body = document.body;
+      const btn = document.getElementById("themeToggle");
+      const isLight = body.getAttribute("data-theme") === "light";
+      body.setAttribute("data-theme", isLight ? "dark" : "light");
+      btn.textContent = isLight ? "Light Mode" : "Dark Mode";
+    }
+
+    function switchTab(tabName, btnElement) {
+      document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+      btnElement.classList.add("active");
+
+      document.querySelectorAll(".section").forEach(s => s.classList.remove("active"));
+      document.getElementById(`${tabName}-section`).classList.add("active");
+    }
+
+    function renderCategoryPills() {
+      const categories = ["All", ...new Set(faqData.map(item => item.category))];
+      const container = document.getElementById("categoryPills");
+      container.innerHTML = categories.map(cat => `
+        <button class="pill ${cat === selectedCategory ? 'active' : ''}" onclick="setCategory('${cat}')">${cat}</button>
+      `).join("");
+    }
+
+    function setCategory(cat) {
+      selectedCategory = cat;
+      renderCategoryPills();
+      renderFAQs();
+    }
+
+    function renderFAQs() {
+      const query = document.getElementById("searchInput").value.toLowerCase();
+      const list = document.getElementById("faqList");
+
+      const filtered = faqData.filter(item => {
+        const matchesCat = selectedCategory === "All" || item.category === selectedCategory;
+        const matchesText =
+          item.myth.toLowerCase().includes(query) ||
+          item.summary.toLowerCase().includes(query) ||
+          item.context.toLowerCase().includes(query);
+        return matchesCat && matchesText;
+      });
+
+      if (filtered.length === 0) {
+        list.innerHTML = `<div class="empty-state">No matching topics found. Try clearing your search filter.</div>`;
+        return;
+      }
+
+      list.innerHTML = filtered.map((item, idx) => `
+        <div class="faq-card" id="card-${idx}">
+          <div class="faq-header" onclick="toggleCard(${idx})">
+            <div>
+              <span class="badge">${item.category}</span>
+              <div class="myth-title">${item.myth}</div>
+              <p class="quick-answer">${item.summary}</p>
+            </div>
+            <span class="toggle-icon" id="icon-${idx}">+</span>
+          </div>
+          <div class="evidence-box">
+            <div class="evidence-block">
+              <div class="evidence-label">Qur'anic Evidence</div>
+              <div class="evidence-text">"${item.quran.text}"</div>
+              <div class="evidence-ref">— ${item.quran.ref}</div>
+            </div>
+            <div class="evidence-block">
+              <div class="evidence-label">Sunnah / Hadith Evidence</div>
+              <div class="evidence-text">"${item.hadith.text}"</div>
+              <div class="evidence-ref">— ${item.hadith.ref}</div>
+            </div>
+            <p class="context-note"><strong>Historical & Linguistic Note:</strong> ${item.context}</p>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function toggleCard(idx) {
+      const card = document.getElementById(`card-${idx}`);
+      const icon = document.getElementById(`icon-${idx}`);
+      card.classList.toggle("open");
+      icon.textContent = card.classList.contains("open") ? "−" : "+";
+    }
+
+    function renderTrivia() {
+      const container = document.getElementById("triviaContainer");
+
+      if (currentQuestion >= triviaData.length) {
+        container.innerHTML = `
+          <div style="text-align: center; padding: 1rem 0;">
+            <h2>Quiz Complete!</h2>
+            <p style="font-size: 1.2rem; margin: 1rem 0;">You scored <strong>${score} out of ${triviaData.length}</strong>.</p>
+            <p style="color: var(--muted); margin-bottom: 1.5rem;">Want to test your knowledge again or explore more evidences in the FAQ?</p>
+            <button class="next-btn show" onclick="restartTrivia()">Play Again</button>
+          </div>
+        `;
+        return;
+      }
+
+      const q = triviaData[currentQuestion];
+      answered = false;
+
+      container.innerHTML = `
+        <div class="trivia-top">
+          <span>Question ${currentQuestion + 1} of ${triviaData.length}</span>
+          <span>Score: ${score}</span>
+        </div>
+        <div class="question-text">${q.question}</div>
+        <div class="options-grid">
+          ${q.options.map((opt, i) => `
+            <button class="option-btn" id="opt-${i}" onclick="selectOption(${i})">${opt}</button>
+          `).join("")}
+        </div>
+        <div class="explanation-panel" id="explanationBox">
+          <strong>Explanation:</strong> ${q.explanation}
+        </div>
+        <button class="next-btn" id="nextBtn" onclick="nextQuestion()">
+          ${currentQuestion === triviaData.length - 1 ? "See Final Score" : "Next Question →"}
+        </button>
+      `;
+    }
+
+    function selectOption(selectedIdx) {
+      if (answered) return;
+      answered = true;
+
+      const q = triviaData[currentQuestion];
+      const buttons = document.querySelectorAll(".option-btn");
+
+      buttons.forEach((btn, i) => {
+        btn.disabled = true;
+        if (i === q.answer) {
+          btn.classList.add("correct");
+        } else if (i === selectedIdx) {
+          btn.classList.add("wrong");
+        }
+      });
+
+      if (selectedIdx === q.answer) {
+        score++;
+      }
+
+      document.getElementById("explanationBox").classList.add("show");
+      document.getElementById("nextBtn").classList.add("show");
+    }
+
+    function nextQuestion() {
+      currentQuestion++;
+      renderTrivia();
+    }
+
+    function restartTrivia() {
+      currentQuestion = 0;
+      score = 0;
+      renderTrivia();
+    }
+
+    // Initialize Page
+    renderCategoryPills();
+    renderFAQs();
+    renderTrivia();
+  </script>
+</body>
+</html>
