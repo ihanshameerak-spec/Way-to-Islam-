@@ -85,6 +85,7 @@
       display: flex;
       gap: 0.5rem;
       align-items: center;
+      flex-wrap: wrap;
     }
 
     .tab-btn, .theme-btn {
@@ -146,7 +147,7 @@
       display: block;
     }
 
-    /* FAQ Controls */
+    /* FAQ & Da'wah Controls */
     .controls-bar {
       display: flex;
       flex-direction: column;
@@ -193,14 +194,14 @@
       border-color: var(--primary);
     }
 
-    /* FAQ Cards */
-    .faq-list {
+    /* FAQ & Da'wah Cards */
+    .faq-list, .dawah-list {
       display: flex;
       flex-direction: column;
       gap: 1rem;
     }
 
-    .faq-card {
+    .faq-card, .dawah-card {
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 12px;
@@ -208,7 +209,7 @@
       box-shadow: var(--shadow);
     }
 
-    .faq-header {
+    .faq-header, .dawah-header {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
@@ -229,13 +230,13 @@
       margin-bottom: 0.4rem;
     }
 
-    .myth-title {
+    .myth-title, .dawah-title {
       font-size: 1.15rem;
       font-weight: 700;
       margin-bottom: 0.4rem;
     }
 
-    .quick-answer {
+    .quick-answer, .dawah-summary {
       color: var(--muted);
       font-size: 0.95rem;
     }
@@ -247,18 +248,19 @@
       user-select: none;
     }
 
-    .evidence-box {
+    .evidence-box, .dawah-details {
       display: none;
       margin-top: 1rem;
       padding-top: 1rem;
       border-top: 1px solid var(--border);
     }
 
-    .faq-card.open .evidence-box {
+    .faq-card.open .evidence-box,
+    .dawah-card.open .dawah-details {
       display: block;
     }
 
-    .evidence-block {
+    .evidence-block, .wisdom-block {
       background: var(--bg);
       border-left: 3px solid var(--primary);
       padding: 0.85rem 1rem;
@@ -266,7 +268,7 @@
       margin-bottom: 0.75rem;
     }
 
-    .evidence-label {
+    .evidence-label, .wisdom-label {
       font-size: 0.8rem;
       font-weight: 700;
       color: var(--primary);
@@ -409,6 +411,7 @@
       <div class="brand">Clarifying Islam</div>
       <div class="nav-controls">
         <button class="tab-btn active" onclick="switchTab('faq', this)">Misconceptions FAQ</button>
+        <button class="tab-btn" onclick="switchTab('dawah', this)">Da'wah &amp; Foundations</button>
         <button class="tab-btn" onclick="switchTab('trivia', this)">Knowledge Trivia</button>
         <button class="theme-btn" id="themeToggle" onclick="toggleTheme()">Dark Mode</button>
       </div>
@@ -417,7 +420,7 @@
 
   <section class="hero">
     <h1>Explore Authentic Islamic Teachings</h1>
-    <p>Clear, evidence-based answers to common questions using the Qur'an and authentic Sunnah, paired with an interactive trivia quiz.</p>
+    <p>Clear, evidence-based answers to common questions using the Qur'an and authentic Sunnah, paired with foundational teachings and an interactive trivia quiz.</p>
   </section>
 
   <main>
@@ -428,6 +431,15 @@
         <div class="filter-pills" id="categoryPills"></div>
       </div>
       <div class="faq-list" id="faqList"></div>
+    </div>
+
+    <!-- DA'WAH & FOUNDATIONS SECTION -->
+    <div id="dawah-section" class="section">
+      <div class="controls-bar">
+        <input type="text" id="dawahSearchInput" class="search-input" placeholder="Search core beliefs or rulings (e.g., tawhid, prayer, fasting, zakah, modesty)..." oninput="renderDawah()" />
+        <div class="filter-pills" id="dawahCategoryPills"></div>
+      </div>
+      <div class="dawah-list" id="dawahList"></div>
     </div>
 
     <!-- TRIVIA SECTION -->
@@ -546,7 +558,69 @@
     ];
 
     // ==========================================
-    // 2. DATA: ADD OR EDIT TRIVIA QUESTIONS HERE
+    // 2. DATA: DA'WAH — CORE BELIEFS & WISDOM OF RULINGS
+    // ==========================================
+    const dawahData = [
+      {
+        category: "Core Beliefs",
+        title: "Tawhid — The Oneness of God",
+        summary: "Allah is one, unique, and has no partners, children, or equals—the sole Creator and Sustainer of everything in existence.",
+        wisdom: "Centering devotion on One Creator frees people from placing ultimate dependency on wealth, status, leaders, or worldly things, grounding identity and moral accountability in a single standard.",
+        reference: "Qur'an 112:1–4 (Surah Al-Ikhlas)",
+        note: "Tawhid is the foundational thread running through all authentic revelation from Adam to Muhammad (peace be upon them all)."
+      },
+      {
+        category: "Core Beliefs",
+        title: "Prophets, Books & The Hereafter",
+        summary: "Muslims believe in all prophets sent by God, the original revelations given to them, angels, divine decree (Qadar), and accountability in the Hereafter.",
+        wisdom: "Sending human messengers provides relatable, practical examples of living faithfully, while belief in accountability after death gives lasting meaning to justice, patience, and good deeds when worldly outcomes feel unfair.",
+        reference: "Qur'an 2:285 & Sahih Muslim 8",
+        note: "Belief in the prophets includes Ibrahim, Musa, Isa, and Muhammad (peace be upon them all), with the Qur'an preserved as the final scripture."
+      },
+      {
+        category: "Wisdom of Rulings",
+        title: "Salah — Five Daily Prayers",
+        summary: "Muslims perform structured prayer five times daily at set intervals from dawn to night.",
+        wisdom: "Regularly pausing during the day acts as a spiritual and mental reset—reminding a person of purpose, gratitude, and humility amid work, stress, and distractions.",
+        reference: "Qur'an 20:14 & Sahih al-Bukhari 528",
+        note: "Beyond ritual movement and recitation, Salah is meant to cultivate mindfulness and steer a person away from wrongdoing (Qur'an 29:45)."
+      },
+      {
+        category: "Wisdom of Rulings",
+        title: "Sawm — Fasting in Ramadan",
+        summary: "Able Muslims abstain from food, drink, and marital relations from dawn until sunset during the month of Ramadan.",
+        wisdom: "Stepping back from everyday comforts builds self-restraint, discipline over habits, gratitude for basic blessings, and genuine empathy for those who go without food.",
+        reference: "Qur'an 2:183",
+        note: "Fasting also emphasizes guarding one's speech and character—not merely skipping meals."
+      },
+      {
+        category: "Wisdom of Rulings",
+        title: "Zakah — Obligatory Charity",
+        summary: "Those who meet a minimum wealth threshold give a set portion annually to support eligible categories of people in need.",
+        wisdom: "Zakah purifies wealth from greed and selfishness, narrows economic hardship within society, and reinforces that wealth is a trust from Allah rather than absolute ownership.",
+        reference: "Qur'an 9:60 & Sahih al-Bukhari 1395",
+        note: "Voluntary charity (Sadaqah) goes even further and can be as simple as a kind word, helping someone, or removing harm from a path."
+      },
+      {
+        category: "Wisdom of Rulings",
+        title: "Modesty (Haya) & Dignified Conduct",
+        summary: "Islam encourages modesty in speech, gaze, interaction, and dress for both men and women.",
+        wisdom: "Modesty helps shift social attention toward character, intellect, and integrity rather than superficial appearance, fostering mutual respect and healthy boundaries.",
+        reference: "Qur'an 24:30–31 & Sahih al-Bukhari 6118",
+        note: "Haya (modesty/reverence) is closely tied to good character and inner self-respect."
+      },
+      {
+        category: "Wisdom of Rulings",
+        title: "Avoiding Intoxicants & Riba (Interest)",
+        summary: "Islam prohibits alcohol/intoxicants and exploitative interest (riba) in financial dealings.",
+        wisdom: "Intoxicants impair sound judgment and can harm health and family stability, while interest-based debt can trap vulnerable borrowers—encouraging fair, transparent, and risk-shared trade instead.",
+        reference: "Qur'an 5:90–91 & Qur'an 2:275–276",
+        note: "Alongside prohibitions, Islam promotes ethical commerce, honoring contracts, and generosity toward those in financial difficulty."
+      }
+    ];
+
+    // ==========================================
+    // 3. DATA: ADD OR EDIT TRIVIA QUESTIONS HERE
     // ==========================================
     const triviaData = [
       {
@@ -582,9 +656,10 @@
     ];
 
     // ==========================================
-    // 3. APP LOGIC (TABS, THEME, FAQ, TRIVIA)
+    // 4. APP LOGIC (TABS, THEME, FAQ, DA'WAH, TRIVIA)
     // ==========================================
     let selectedCategory = "All";
+    let selectedDawahCategory = "All";
     let currentQuestion = 0;
     let score = 0;
     let answered = false;
@@ -671,6 +746,68 @@
       icon.textContent = card.classList.contains("open") ? "−" : "+";
     }
 
+    function renderDawahCategoryPills() {
+      const categories = ["All", ...new Set(dawahData.map(item => item.category))];
+      const container = document.getElementById("dawahCategoryPills");
+      container.innerHTML = categories.map(cat => `
+        <button class="pill ${cat === selectedDawahCategory ? 'active' : ''}" onclick="setDawahCategory('${cat.replace(/'/g, "\\'")}')">${cat}</button>
+      `).join("");
+    }
+
+    function setDawahCategory(cat) {
+      selectedDawahCategory = cat;
+      renderDawahCategoryPills();
+      renderDawah();
+    }
+
+    function renderDawah() {
+      const query = document.getElementById("dawahSearchInput").value.toLowerCase();
+      const list = document.getElementById("dawahList");
+
+      const filtered = dawahData.filter(item => {
+        const matchesCat = selectedDawahCategory === "All" || item.category === selectedDawahCategory;
+        const matchesText =
+          item.title.toLowerCase().includes(query) ||
+          item.summary.toLowerCase().includes(query) ||
+          item.wisdom.toLowerCase().includes(query) ||
+          item.note.toLowerCase().includes(query);
+        return matchesCat && matchesText;
+      });
+
+      if (filtered.length === 0) {
+        list.innerHTML = `<div class="empty-state">No matching topics found. Try clearing your search filter.</div>`;
+        return;
+      }
+
+      list.innerHTML = filtered.map((item, idx) => `
+        <div class="dawah-card" id="dawah-card-${idx}">
+          <div class="dawah-header" onclick="toggleDawahCard(${idx})">
+            <div>
+              <span class="badge">${item.category}</span>
+              <div class="dawah-title">${item.title}</div>
+              <p class="dawah-summary">${item.summary}</p>
+            </div>
+            <span class="toggle-icon" id="dawah-icon-${idx}">+</span>
+          </div>
+          <div class="dawah-details">
+            <div class="wisdom-block">
+              <div class="wisdom-label">Reasoning &amp; Wisdom (Hikmah)</div>
+              <div>${item.wisdom}</div>
+              <div class="evidence-ref" style="margin-top: 0.35rem;">— ${item.reference}</div>
+            </div>
+            <p class="context-note"><strong>Note:</strong> ${item.note}</p>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function toggleDawahCard(idx) {
+      const card = document.getElementById(`dawah-card-${idx}`);
+      const icon = document.getElementById(`dawah-icon-${idx}`);
+      card.classList.toggle("open");
+      icon.textContent = card.classList.contains("open") ? "−" : "+";
+    }
+
     function renderTrivia() {
       const container = document.getElementById("triviaContainer");
 
@@ -747,6 +884,8 @@
     // Initialize Page
     renderCategoryPills();
     renderFAQs();
+    renderDawahCategoryPills();
+    renderDawah();
     renderTrivia();
   </script>
 </body>
