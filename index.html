@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Clarifying Islam — Myths, Evidence & Trivia</title>
+  <title>Clarifying Islam — Myths, Evidence &amp; Trivia</title>
   <style>
     :root {
       --bg: #f8fafc;
@@ -147,7 +147,7 @@
       display: block;
     }
 
-    /* FAQ & Da'wah Controls */
+    /* Controls */
     .controls-bar {
       display: flex;
       flex-direction: column;
@@ -301,6 +301,42 @@
       margin-top: 0.5rem;
     }
 
+    /* Surah Directory */
+    .surah-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+      gap: 0.6rem;
+    }
+
+    .surah-link {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.65rem 0.85rem;
+      border-radius: 9px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text);
+      text-decoration: none;
+      font-size: 0.92rem;
+      font-weight: 600;
+      transition: border-color 0.2s;
+    }
+
+    .surah-link:hover {
+      border-color: var(--primary);
+    }
+
+    .surah-num {
+      color: var(--primary);
+      margin-right: 0.4rem;
+    }
+
+    .surah-arrow {
+      color: var(--muted);
+      font-size: 0.8rem;
+    }
+
     /* Trivia Section */
     .trivia-card {
       background: var(--surface);
@@ -421,6 +457,9 @@
       <div class="nav-controls">
         <button class="tab-btn active" onclick="switchTab('faq', this)">Misconceptions FAQ</button>
         <button class="tab-btn" onclick="switchTab('dawah', this)">Da'wah &amp; Foundations</button>
+        <button class="tab-btn" onclick="switchTab('pray', this)">How to Pray</button>
+        <button class="tab-btn" onclick="switchTab('hifz', this)">Memorize Qur'an</button>
+        <button class="tab-btn" onclick="switchTab('revert', this)">New Muslim Guide</button>
         <button class="tab-btn" onclick="switchTab('trivia', this)">Knowledge Trivia</button>
         <button class="theme-btn" id="themeToggle" onclick="toggleTheme()">Dark Mode</button>
       </div>
@@ -429,7 +468,7 @@
 
   <section class="hero">
     <h1>Explore Authentic Islamic Teachings</h1>
-    <p>Clear, evidence-based answers to common questions using the Qur'an and authentic Sunnah, paired with foundational teachings and an interactive trivia quiz.</p>
+    <p>Clear, evidence-based answers to common questions using the Qur'an and authentic Sunnah, paired with foundational teachings, prayer and Qur'an guides, new-Muslim resources, and interactive trivia.</p>
   </section>
 
   <main>
@@ -445,10 +484,106 @@
     <!-- DA'WAH & FOUNDATIONS SECTION -->
     <div id="dawah-section" class="section">
       <div class="controls-bar">
-        <input type="text" id="dawahSearchInput" class="search-input" placeholder="Search core beliefs or rulings (e.g., tawhid, prayer, fasting, zakah, modesty)..." oninput="renderDawah()" />
+        <input type="text" id="dawahSearchInput" class="search-input" placeholder="Search core beliefs or rulings (e.g., tawhid, prayer, fasting, zakah, modesty, honesty)..." oninput="renderDawah()" />
         <div class="filter-pills" id="dawahCategoryPills"></div>
       </div>
       <div class="dawah-list" id="dawahList"></div>
+    </div>
+
+    <!-- HOW TO PRAY SECTION -->
+    <div id="pray-section" class="section">
+      <div class="controls-bar">
+        <div class="filter-pills" id="prayFilterPills"></div>
+      </div>
+      <div class="dawah-list" id="prayList"></div>
+    </div>
+
+    <!-- QUR'AN MEMORIZATION SECTION -->
+    <div id="hifz-section" class="section">
+      <div class="dawah-card open" style="margin-bottom: 1.25rem;">
+        <div class="dawah-header" onclick="this.parentElement.classList.toggle('open')">
+          <div>
+            <span class="badge">Why It Matters</span>
+            <div class="dawah-title">The Importance of Learning the Qur'an</div>
+            <p class="dawah-summary">Connecting with the Qur'an is not just about memorizing words—it is about guidance, reflection, and lifelong character.</p>
+          </div>
+          <span class="toggle-icon">−</span>
+        </div>
+        <div class="dawah-details" style="display: block;">
+          <div class="wisdom-block" style="margin-bottom: 0;">
+            <div class="wisdom-label">Core Reasons to Learn &amp; Study It</div>
+            <p>• <strong>Clear Moral &amp; Spiritual Guidance:</strong> It gives a steady compass for faith, gratitude, patience, justice, and how to treat people in everyday life.</p>
+            <p>• <strong>Deeper Meaning in Salah:</strong> Understanding and remembering passages you recite turns daily prayer from routine into a focused conversation with Allah.</p>
+            <p>• <strong>A Lasting Bond Across Life:</strong> Whether you learn a few short passages at a time or work toward full memorization, regular engagement keeps your heart grounded and connected to your values.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="controls-bar">
+        <div class="filter-pills" id="hifzFilterPills"></div>
+      </div>
+
+      <div class="dawah-card" style="margin-bottom: 1rem;">
+        <div class="dawah-header" onclick="this.parentElement.classList.toggle('open')">
+          <div>
+            <span class="badge">Interactive Tool</span>
+            <div class="dawah-title">Daily Portion &amp; Recall Drill</div>
+            <p class="dawah-summary">Pick a routine, mark your completed revision steps for today, and generate a self-testing prompt.</p>
+          </div>
+          <span class="toggle-icon">+</span>
+        </div>
+        <div class="dawah-details" style="display: block;">
+          <div class="wisdom-block">
+            <div class="wisdom-label">Today's 4-Step Hifz Checklist</div>
+            <p><label><input type="checkbox" id="hifzStep1" onchange="updateHifzProgress()"> 1. Listen &amp; read the new passage slowly to grasp meaning and flow.</label></p>
+            <p><label><input type="checkbox" id="hifzStep2" onchange="updateHifzProgress()"> 2. Memorize line by line (or verse cluster by cluster) and recite aloud.</label></p>
+            <p><label><input type="checkbox" id="hifzStep3" onchange="updateHifzProgress()"> 3. Link the new lines to the end of your previous day's portion.</label></p>
+            <p><label><input type="checkbox" id="hifzStep4" onchange="updateHifzProgress()"> 4. Review older memorized portions so nothing fades.</label></p>
+            <p id="hifzProgressText" class="evidence-ref" style="margin-top: 0.5rem;">0 of 4 steps completed today</p>
+          </div>
+          <button class="next-btn show" style="margin-top: 0.5rem;" onclick="generateRecallPrompt()">New Self-Test Prompt</button>
+          <p id="recallPromptOutput" class="context-note" style="margin-top: 0.65rem;">Click "New Self-Test Prompt" for a recall exercise to test your memory without looking at the page.</p>
+        </div>
+      </div>
+
+      <div class="dawah-list" id="hifzList"></div>
+
+      <div class="dawah-card open" style="margin-top: 1.5rem;">
+        <div class="dawah-header" onclick="toggleSurahDirectory()">
+          <div>
+            <span class="badge">Quick Access</span>
+            <div class="dawah-title">All 114 Surahs — Read &amp; Listen on Quran.com</div>
+            <p class="dawah-summary">Search any Surah by name or number and open it directly on Quran.com to read, listen, and follow along.</p>
+          </div>
+          <span class="toggle-icon" id="surahDirIcon">−</span>
+        </div>
+        <div class="dawah-details" id="surahDirBody" style="display: block;">
+          <input
+            type="text"
+            id="surahSearchInput"
+            class="search-input"
+            style="margin-bottom: 1rem;"
+            placeholder="Search Surah by name or number (e.g., Al-Fatihah, Mulk, 36, 112)..."
+            oninput="renderSurahLinks()"
+          />
+          <div id="surahLinksGrid" class="surah-grid"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- NEW MUSLIM GUIDE SECTION -->
+    <div id="revert-section" class="section">
+      <div class="controls-bar">
+        <input
+          type="text"
+          id="revertSearchInput"
+          class="search-input"
+          placeholder="Search new Muslim topics (e.g., 30 days, phrases, family, culture, wudu, food)..."
+          oninput="renderRevertGuide()"
+        />
+        <div class="filter-pills" id="revertFilterPills"></div>
+      </div>
+      <div class="dawah-list" id="revertList"></div>
     </div>
 
     <!-- TRIVIA SECTION -->
@@ -463,7 +598,7 @@
 
   <script>
     // ==========================================
-    // 1. DATA: ADD OR EDIT MISCONCEPTIONS HERE
+    // 1. DATA: MISCONCEPTIONS FAQ
     // ==========================================
     const faqData = [
       {
@@ -597,6 +732,45 @@
         note: "Muslims honor and believe in all true prophets and scriptures sent by Allah, viewing the Qur'an as the preserved final revelation."
       },
       {
+        category: "Core Beliefs",
+        title: "The Six Articles of Faith (Iman)",
+        summary: "Islamic faith rests on six foundational convictions: belief in Allah, His angels, His revealed books, His messengers, the Last Day, and divine decree (Qadar).",
+        wisdom: [
+          "Together, the six articles of faith form a complete worldview rather than a scattered list of ideas. Belief in Allah establishes who created and sustains the universe, while belief in angels reminds believers that creation includes unseen servants of God carrying out His commands with obedience.",
+          "Belief in all original revealed scriptures—such as the Suhuf of Ibrahim, the Tawrah given to Musa, the Zabur given to Dawud, the Injil given to Isa, and the preserved Qur'an revealed to Muhammad (peace be upon them all)—shows that divine guidance is a single continuous message across human history.",
+          "Belief in the Last Day gives moral seriousness to everyday choices. Knowing that every person will stand before Allah with full justice reassures those who endure hardship patiently and warns against harming others even when nobody is watching.",
+          "Finally, belief in Qadar balances human effort with inner peace. A believer plans wisely, works diligently, and takes responsibility for their actions, while trusting Allah's wisdom over outcomes beyond human control."
+        ],
+        reference: "Qur'an 4:136 & Sahih Muslim 8",
+        note: "In Islam, true faith (Iman) is not merely verbal agreement—it is conviction in the heart, affirmation on the tongue, and action in daily character."
+      },
+      {
+        category: "Core Beliefs",
+        title: "Fitrah — The Natural Disposition Toward God & Goodness",
+        summary: "Islam teaches that every human being is born with an innate spiritual compass (fitrah) inclined toward recognizing the Creator and valuing truth and justice.",
+        wisdom: [
+          "Unlike traditions that view humanity as born tainted by inherited guilt, Islam teaches that every child enters the world in a state of purity and natural receptivity to truth, known as fitrah.",
+          "This innate disposition explains why people across every culture and era instinctively ask big questions about purpose, feel awe before the universe, and recognize basic moral truths like honesty, fairness, and gratitude.",
+          "Over time, social conditioning, distractions, or pride can cloud that inner clarity. Revelation and prophetic guidance act like a mirror—not forcing something foreign onto the human soul, but awakening what was already placed inside it.",
+          "Understanding fitrah encourages warmth and patience in Da'wah. Rather than approaching others with hostility, a Muslim speaks to the shared human longing for meaning, peace, and connection with our Creator."
+        ],
+        reference: "Qur'an 30:30 & Sahih al-Bukhari 1358",
+        note: "Because every person is born upon fitrah, Islam views turning toward Allah as a return home rather than a leap into the unknown."
+      },
+      {
+        category: "Core Beliefs",
+        title: "Repentance (Tawbah) & Allah's Mercy",
+        summary: "No sin is too great for Allah's forgiveness when a person turns back sincerely, stops the wrong, regrets it, and resolves to do better.",
+        wisdom: [
+          "Human beings are not expected to be infallible angels; making mistakes and stumbling is part of being human. What defines a believer in Islam is not never falling, but turning back to Allah whenever they do.",
+          "The Arabic word tawbah literally means 'to return.' Sincere repentance requires no human intermediary or confession to a priest—any person, anywhere, can speak directly to Allah in private and ask for forgiveness.",
+          "True tawbah is practical as well as spiritual: it involves stopping the harmful behavior, feeling genuine remorse, resolving not to repeat it, and—if another person was wronged—restoring their rights or seeking their pardon.",
+          "This open door of mercy protects the heart from despair. Even after years of mistakes, a single sincere step back toward Allah wipes the slate clean and opens a fresh chapter."
+        ],
+        reference: "Qur'an 39:53 & Sahih Muslim 2747",
+        note: "The Prophet (peace be upon him) taught that Allah rejoices more over the repentance of His servant than a traveler finding lost provisions in the desert."
+      },
+      {
         category: "Wisdom of Rulings",
         title: "Salah — Five Daily Prayers",
         summary: "Muslims perform structured prayer five times daily at set intervals from dawn to night.",
@@ -637,6 +811,45 @@
       },
       {
         category: "Wisdom of Rulings",
+        title: "Hajj — The Pilgrimage of Unity & Humility",
+        summary: "Once in a lifetime, Muslims who are physically and financially able gather in Makkah for Hajj, standing together as equals before Allah.",
+        wisdom: [
+          "Hajj brings together millions of Muslims from every continent, language, and background in a single place at the same time. For several days, differences of wealth, nationality, and social rank disappear.",
+          "Men wear two simple unsewn white cloths (ihram) and women wear modest, unpretentious attire, visually stripping away markers of status so a CEO and a laborer stand side by side on identical footing.",
+          "The rites of Hajj—circling the Ka'bah, walking between Safa and Marwah, and standing in prayer at Arafah—connect believers to the legacy of Prophet Ibrahim, Hajar, and Isma'il (peace be upon them) and rehearse the Day of Judgment.",
+          "Returning from Hajj is meant to mark a lifelong renewal: softer speech, greater patience, detachment from worldly pride, and active care for one's community."
+        ],
+        reference: "Qur'an 3:97 & Sahih al-Bukhari 1521",
+        note: "Hajj is only obligatory upon those who possess the health and financial means without harming the needs of their dependents."
+      },
+      {
+        category: "Wisdom of Rulings",
+        title: "Halal Diet & Gratitude for Provision",
+        summary: "Islamic dietary guidelines permit wholesome, pure foods while prohibiting harmful substances such as intoxicants, blood, carrion, and pork.",
+        wisdom: [
+          "In Islam, eating is not treated as an automatic physical habit disconnected from spirituality. The Qur'an pairs consuming what is tayyib (pure and wholesome) with gratitude to Allah and upright conduct.",
+          "Mentioning Allah's name before eating and thanking Him afterward turns every meal into a quiet reminder that health, crops, water, and sustenance are gifts rather than entitlements.",
+          "Islamic rules around animal welfare—such as forbidding cruelty, avoiding fright before slaughter, and ensuring a swift, respectful process—emphasize that animals are living creatures with rights over human caretakers.",
+          "At the same time, Islamic law builds in practical mercy: if a person faces genuine starvation with no permissible food available, preserving human life takes priority."
+        ],
+        reference: "Qur'an 2:168, Qur'an 5:3 & Sahih Muslim 1955",
+        note: "Everything in food and drink is permissible by default in Islam unless specifically prohibited by clear scriptural evidence."
+      },
+      {
+        category: "Wisdom of Rulings",
+        title: "Honoring Parents & Maintaining Family Ties",
+        summary: "Right after worshiping Allah alone, the Qur'an repeatedly commands kindness, patience, and respect toward parents and relatives.",
+        wisdom: [
+          "Across multiple chapters of the Qur'an, treating parents with ihsan (excellence and tenderness) is placed directly alongside believing in One God—showing how central family care is to Islamic ethics.",
+          "As parents grow older and require patience, Islam forbids even a word of irritation ('uff') or harsh tone, calling instead for humility, gentle speech, and active support.",
+          "Maintaining family ties (silat ar-rahim) extends beyond immediate parents to siblings, aunts, uncles, and extended relatives—checking in on them, sharing joy, and helping during hardship.",
+          "Even when family members hold different views or act imperfectly, a Muslim is encouraged to respond with patience, fairness, and good manners without compromising core principles."
+        ],
+        reference: "Qur'an 17:23–24 & Sahih al-Bukhari 5971",
+        note: "The Prophet (peace be upon him) emphasized a mother's rank three times before mentioning the father when asked who deserves the best companionship."
+      },
+      {
+        category: "Wisdom of Rulings",
         title: "Modesty (Haya) & Dignified Conduct",
         summary: "Islam encourages modesty in speech, gaze, interaction, and dress for both men and women.",
         wisdom: [
@@ -660,11 +873,351 @@
         ],
         reference: "Qur'an 5:90–91 & Qur'an 2:275–276",
         note: "Islam pairs these prohibitions with positive encouragement toward honesty in business, fulfilling contracts, and supporting people in financial hardship."
+      },
+      {
+        category: "Wisdom of Rulings",
+        title: "Truthfulness (Sidq) & Fulfilling Promises",
+        summary: "Islam treats honesty in speech and reliability in commitments as core pillars of character rather than optional extras.",
+        wisdom: [
+          "Truthfulness in Islam goes beyond avoiding outright lies; it means alignment between what a person says, intends, and does. When words match reality and commitments are kept, trust becomes the natural baseline in relationships and business.",
+          "Broken promises and casual dishonesty erode social stability quickly. Whether in a major contract, a personal favor, or an everyday schedule, keeping your word protects others from wasted time, confusion, and betrayal.",
+          "Even when telling the truth feels uncomfortable or costly in the short term, Islamic ethics encourages standing by honesty with grace—because short-term shortcuts often create much heavier complications later.",
+          "Practicing sidq builds inner calm as well. A person who speaks plainly and keeps commitments does not have to juggle fabricated stories or worry about being caught out."
+        ],
+        reference: "Qur'an 9:119 & Sahih al-Bukhari 6094",
+        note: "The Prophet (peace be upon him) linked truthfulness directly to righteousness and warned against habits that chip away at trustworthiness."
+      },
+      {
+        category: "Wisdom of Rulings",
+        title: "Guarding the Tongue Against Backbiting & Gossip",
+        summary: "Speaking ill of someone behind their back or spreading harmful talk is strongly prohibited in Islam to protect human dignity and community peace.",
+        wisdom: [
+          "In Islamic ethics, backbiting (ghibah) means mentioning something about an absent person that they would dislike hearing—even if the statement happens to be true. The Qur'an vividly compares it to eating the flesh of one's deceased brother to show how damaging it is.",
+          "Casual gossip often disguises itself as harmless conversation or 'just venting,' yet it quietly poisons trust, breeds resentment, and damages reputations when the person is not there to clarify or defend themselves.",
+          "Restraining the tongue does not mean ignoring genuine harm or staying silent when someone needs protection or fair reporting; it means speaking with fairness, necessity, and care rather than malice or cheap entertainment.",
+          "Learning to pause before speaking—or changing the subject when talk turns cruel—trains self-control and keeps hearts cleaner toward others."
+        ],
+        reference: "Qur'an 49:12 & Sahih Muslim 2589",
+        note: "Islam pairs guarding the tongue with encouraging speech that uplifts, resolves tension, or remains respectfully quiet when nothing good can be said."
+      },
+      {
+        category: "Wisdom of Rulings",
+        title: "Justice ('Adl) Even Toward Those We Dislike",
+        summary: "Islam commands fairness and balanced judgment across all people, refusing to let personal feelings or group loyalty excuse injustice.",
+        wisdom: [
+          "One of the clearest moral standards in the Qur'an is that fairness cannot be selective. Believers are told to stand firm for justice even if it goes against their own desires, close relatives, or favored groups.",
+          "Personal bias, anger, or rivalry easily distorts how we judge situations—making us exaggerate another person's flaws while excusing our own. Requiring justice keeps truth anchored to facts and fairness rather than emotion.",
+          "In everyday life, this ruling shapes how disputes are handled, how credit is shared, and how people treat those who disagree with them or belong to different backgrounds.",
+          "When justice is paired with ihsan (going above and beyond in kindness and forgiveness where appropriate), communities become both fair and humane."
+        ],
+        reference: "Qur'an 4:135 & Qur'an 5:8",
+        note: "Justice protects the vulnerable and keeps authority and relationships accountable to a higher moral standard than raw power or preference."
+      },
+      {
+        category: "Wisdom of Rulings",
+        title: "Rights of Neighbors & Care for the Vulnerable",
+        summary: "Islam places strong emphasis on looking out for neighbors, supporting orphans and those in need, and keeping shared spaces safe and welcoming.",
+        wisdom: [
+          "In Islamic teaching, a person's immediate surroundings—next-door neighbors, apartment residents, and local community members—carry real moral weight. Harming a neighbor or ignoring their distress clashes with genuine faith.",
+          "Practical care can be simple and consistent: checking in on someone who is sick or elderly, sharing food or help when possible, keeping noise and trouble down, and offering a friendly greeting.",
+          "The Qur'an and Sunnah also repeatedly highlight care for orphans, widows, travelers, and people facing financial strain, reminding believers that strength and resources come with responsibility toward those with less leverage.",
+          "By turning everyday proximity into mutual care, these rulings help turn neighborhoods from isolated collections of doors into supportive communities."
+        ],
+        reference: "Qur'an 4:36 & Sahih al-Bukhari 6014",
+        note: "The Prophet (peace be upon him) emphasized the rights of the neighbor so strongly that listeners felt neighbors might almost be given a share in inheritance."
+      },
+      {
+        category: "Wisdom of Rulings",
+        title: "Controlling Anger & Responding With Restraint",
+        summary: "Rather than equating strength with lashing out, Islam defines real strength as holding oneself back when angry.",
+        wisdom: [
+          "Anger is a natural human emotion, not a sin in itself—what matters is how a person acts when triggered. Unchecked anger often leads to harsh words, rash decisions, broken bonds, and deep regret afterward.",
+          "The Prophet (peace be upon him) taught that the truly strong person is the one who controls themselves in moments of anger, rather than someone who vents every impulse without restraint.",
+          "Practical Islamic guidance for cooling anger—such as pausing, changing posture (sitting or lying down if standing), seeking refuge in Allah, or stepping away before replying—gives space for clear judgment to return.",
+          "Over time, practicing restraint makes conflict resolution calmer and prevents small misunderstandings from escalating into lasting harm."
+        ],
+        reference: "Qur'an 3:134 & Sahih al-Bukhari 6114",
+        note: "Pardoning when in a position to retaliate is praised in the Qur'an as a mark of nobility and emotional maturity."
       }
     ];
 
     // ==========================================
-    // 3. DATA: ADD OR EDIT TRIVIA QUESTIONS HERE
+    // 3. DATA: HOW TO PRAY (SALAH) STEP-BY-STEP
+    // ==========================================
+    const prayerSteps = [
+      {
+        stage: "1. Preparation",
+        title: "Wudu (Ablution) & Facing the Qiblah",
+        summary: "Before praying, ensure your body, clothes, and prayer space are clean, perform Wudu, and face the direction of the Ka'bah in Makkah.",
+        details: [
+          "Make a sincere intention in your heart for the specific prayer you are about to perform (Fajr, Dhuhr, Asr, Maghrib, or Isha).",
+          "Perform Wudu by washing your hands, rinsing your mouth and nose, washing your face, washing both arms up to the elbows, wiping your head and ears, and washing both feet up to the ankles.",
+          "Stand calmly facing the Qiblah with modest, clean attire and a focused mind."
+        ],
+        arabic: "بِسْمِ اللَّهِ",
+        transliteration: "Bismillah",
+        translation: "In the name of Allah (said before starting Wudu)."
+      },
+      {
+        stage: "2. Starting the Prayer",
+        title: "Takbirat al-Ihram & Opening Supplication",
+        summary: "Raise both hands to ear/shoulder level and say 'Allahu Akbar' to enter the state of prayer, then place your right hand over your left on your chest.",
+        details: [
+          "Keep your gaze fixed downward toward the spot where your forehead will touch in prostration.",
+          "Quietly recite the opening supplication (Dua al-Istiftah) praising Allah, followed by seeking refuge from Shaytan."
+        ],
+        arabic: "اللَّهُ أَكْبَرُ",
+        transliteration: "Allahu Akbar",
+        translation: "Allah is the Greatest."
+      },
+      {
+        stage: "3. Standing (Qiyam)",
+        title: "Reciting Surah Al-Fatihah & Another Surah",
+        summary: "Surah Al-Fatihah is recited in every unit (rak'ah) of prayer, followed by another short passage from the Qur'an in the first two rak'ahs.",
+        details: [
+          "Recite Surah Al-Fatihah clearly and unhurriedly, pausing briefly at the end of each verse, and say 'Ameen' upon finishing.",
+          "In the first two rak'ahs, follow Al-Fatihah with any short surah or verses you have memorized, such as Surah Al-Ikhlas (Chapter 112)."
+        ],
+        arabic: "الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ",
+        transliteration: "Alhamdulillahi Rabbil-'alamin...",
+        translation: "All praise is due to Allah, Lord of the worlds... (Opening of Surah Al-Fatihah)"
+      },
+      {
+        stage: "4. Bowing (Ruku)",
+        title: "Bowing with Humility",
+        summary: "Say 'Allahu Akbar' and bow forward with your back straight and hands resting firmly on your knees.",
+        details: [
+          "Pause calmly in Ruku without rushing and repeat the glorification phrase at least three times.",
+          "Rise back up to a straight standing position while saying 'Sami'Allahu liman hamidah', then say 'Rabbana wa lakal-hamd'."
+        ],
+        arabic: "سُبْحَانَ رَبِّيَ الْعَظِيمِ",
+        transliteration: "Subhana Rabbiyal-'Adheem (3x)",
+        translation: "Glory be to my Lord, the Supreme."
+      },
+      {
+        stage: "5. Prostration (Sujud)",
+        title: "Two Prostrations per Rak'ah",
+        summary: "Say 'Allahu Akbar' and go down into prostration with seven body parts touching the ground: forehead and nose, both palms, both knees, and the toes of both feet.",
+        details: [
+          "Repeat 'Subhana Rabbiyal-A'la' at least three times and make personal du'a, as a believer is closest to Allah in prostration.",
+          "Say 'Allahu Akbar', sit up briefly on your legs saying 'Rabbighfir li' (My Lord, forgive me), then perform a second prostration in the same manner."
+        ],
+        arabic: "سُبْحَانَ رَبِّيَ الْأَعْلَى",
+        transliteration: "Subhana Rabbiyal-A'la (3x)",
+        translation: "Glory be to my Lord, the Most High."
+      },
+      {
+        stage: "6. Sitting (Tashahhud) & Ending (Taslim)",
+        title: "Testimony of Faith, Salawat & Peace",
+        summary: "After every two rak'ahs, sit calmly to recite At-Tahiyyat. In the final sitting of the prayer, add blessings upon the Prophet (peace be upon him) and conclude with Taslim.",
+        details: [
+          "In a 3- or 4-rak'ah prayer, stand back up after the first Tashahhud to complete the remaining rak'ahs (reciting only Surah Al-Fatihah while standing in rak'ahs 3 and 4).",
+          "In the final sitting, recite At-Tahiyyat followed by As-Salat al-Ibrahimiyyah (sending blessings upon Prophet Muhammad and Prophet Ibrahim, peace be upon them).",
+          "Conclude the prayer by turning your head to the right and saying 'Assalamu alaykum wa rahmatullah', then turning to the left and repeating it."
+        ],
+        arabic: "السَّلَامُ عَلَيْكُمْ وَرَحْمَةُ اللَّهِ",
+        transliteration: "Assalamu alaykum wa rahmatullah",
+        translation: "Peace and mercy of Allah be upon you."
+      },
+      {
+        stage: "Quick Reference",
+        title: "Daily Prayer Rak'ah Counts",
+        summary: "A quick overview of the five obligatory daily prayers and how many units (rak'ahs) each contains.",
+        details: [
+          "Fajr (Dawn): 2 obligatory rak'ahs (recited aloud).",
+          "Dhuhr (Midday): 4 obligatory rak'ahs (recited quietly).",
+          "Asr (Afternoon): 4 obligatory rak'ahs (recited quietly).",
+          "Maghrib (Sunset): 3 obligatory rak'ahs (first 2 aloud, 3rd quietly).",
+          "Isha (Night): 4 obligatory rak'ahs (first 2 aloud, last 2 quietly)."
+        ],
+        arabic: "إِنَّ الصَّلَاةَ كَانَتْ عَلَى الْمُؤْمِنِينَ كِتَابًا مَّوْقُوتًا",
+        transliteration: "Innas-salata kanat 'alal-mu'minina kitaban mawquta",
+        translation: "Indeed, prayer has been decreed upon the believers at specified times. (Qur'an 4:103)"
+      }
+    ];
+
+    // ==========================================
+    // 4. DATA: QUR'AN MEMORIZATION (HIFZ) & 114 SURAHS
+    // ==========================================
+    const hifzGuides = [
+      {
+        category: "Method",
+        title: "Small, Consistent Portions Over Cramming",
+        summary: "Short daily sessions with steady repetition beat long, sporadic bursts that lead to burnout.",
+        steps: [
+          "Choose a realistic amount you can sustain every single day—even a few lines or a short passage is plenty when starting out.",
+          "Focus on accuracy and proper pronunciation from the start so you do not have to unlearn mistakes later.",
+          "Keep your pace calm and repeatable rather than racing to finish a page in one sitting."
+        ],
+        tip: "Consistency is what locks passages into long-term memory; missing a day is normal, so simply pick up your routine the next day."
+      },
+      {
+        category: "Method",
+        title: "The Chunking & Linking Technique",
+        summary: "Break a passage into small natural thought units, master each unit, and chain them together smoothly.",
+        steps: [
+          "Divide your target passage into small clusters of a few lines or verses based on meaning and pauses.",
+          "Recite Cluster A repeatedly until you can say it smoothly without glancing down, then do the same for Cluster B.",
+          "Connect Cluster A + B together, then add Cluster C, checking transitions between each section."
+        ],
+        tip: "Pay extra attention to the first and last words of each section—those transition points are where memory slips most often."
+      },
+      {
+        category: "Revision",
+        title: "Protecting Old Memorization (Muraja'ah)",
+        summary: "New memorization means very little if older passages are left unreviewed.",
+        steps: [
+          "Dedicate time in every session to reviewing what you already memorized before adding brand-new lines.",
+          "Rotate through older sections on a weekly schedule so every part gets regular attention.",
+          "Recite portions during quiet moments or in optional/daily prayers where appropriate to reinforce recall."
+        ],
+        tip: "A helpful rule of thumb is to spend more energy keeping what you already have strong than piling on unreviewed material."
+      },
+      {
+        category: "Mindset",
+        title: "Meaning, Reflection & Good Timing",
+        summary: "Understanding the theme of a passage and choosing a clear-headed time of day makes recall noticeably easier.",
+        steps: [
+          "Read a clear translation or summary of the passage first so you follow the story or argument rather than memorizing isolated sounds.",
+          "Pick a time when your mind is fresh and distractions are low—many learners prefer early morning or quiet evening hours.",
+          "Ask Allah sincerely for ease, understanding, and steadfastness as you study."
+        ],
+        tip: "When a verse feels tricky, look at how the idea flows from the previous verse—context acts like a mental signpost."
+      }
+    ];
+
+    const recallPrompts = [
+      "Close your mushaf or notes and recite your newest passage from start to finish, focusing on smooth transitions between verses.",
+      "Pick a passage you memorized earlier this week and recite it aloud while checking that no words or endings were swapped.",
+      "Test your starting points: try reciting just the opening line of five different passages you have worked on recently.",
+      "Recite your current portion slowly and pay close attention to pauses and vowel endings without rushing to the next line.",
+      "Practice bridging two sections together—say the last two lines of your previous passage and flow straight into the first line of the next."
+    ];
+
+    const surahNames = [
+      "Al-Fatihah", "Al-Baqarah", "Ali 'Imran", "An-Nisa", "Al-Ma'idah", "Al-An'am",
+      "Al-A'raf", "Al-Anfal", "At-Tawbah", "Yunus", "Hud", "Yusuf",
+      "Ar-Ra'd", "Ibrahim", "Al-Hijr", "An-Nahl", "Al-Isra", "Al-Kahf",
+      "Maryam", "Taha", "Al-Anbya", "Al-Hajj", "Al-Mu'minun", "An-Nur",
+      "Al-Furqan", "Ash-Shu'ara", "An-Naml", "Al-Qasas", "Al-'Ankabut", "Ar-Rum",
+      "Luqman", "As-Sajdah", "Al-Ahzab", "Saba", "Fatir", "Ya-Sin",
+      "As-Saffat", "Sad", "Az-Zumar", "Ghafir", "Fussilat", "Ash-Shuraa",
+      "Az-Zukhruf", "Ad-Dukhan", "Al-Jathiyah", "Al-Ahqaf", "Muhammad", "Al-Fath",
+      "Al-Hujurat", "Qaf", "Adh-Dhariyat", "At-Tur", "An-Najm", "Al-Qamar",
+      "Ar-Rahman", "Al-Waqi'ah", "Al-Hadid", "Al-Mujadila", "Al-Hashr", "Al-Mumtahanah",
+      "As-Saf", "Al-Jumu'ah", "Al-Munafiqun", "At-Taghabun", "At-Talaq", "At-Tahrim",
+      "Al-Mulk", "Al-Qalam", "Al-Haqqah", "Al-Ma'arij", "Nuh", "Al-Jinn",
+      "Al-Muzzammil", "Al-Muddaththir", "Al-Qiyamah", "Al-Insan", "Al-Mursalat", "An-Naba",
+      "An-Nazi'at", "'Abasa", "At-Takwir", "Al-Infitar", "Al-Mutaffifin", "Al-Inshiqaq",
+      "Al-Buruj", "At-Tariq", "Al-A'la", "Al-Ghashiyah", "Al-Fajr", "Al-Balad",
+      "Ash-Shams", "Al-Layl", "Ad-Duhaa", "Ash-Sharh", "At-Tin", "Al-'Alaq",
+      "Al-Qadr", "Al-Bayyinah", "Az-Zalzalah", "Al-'Adiyat", "Al-Qari'ah", "At-Takathur",
+      "Al-'Asr", "Al-Humazah", "Al-Fil", "Quraysh", "Al-Ma'un", "Al-Kawthar",
+      "Al-Kafirun", "An-Nasr", "Al-Masad", "Al-Ikhlas", "Al-Falaq", "An-Nas"
+    ];
+
+    // ==========================================
+    // 5. DATA: NEW MUSLIM GUIDE
+    // ==========================================
+    const revertGuideData = [
+      {
+        category: "First 30 Days",
+        title: "First 30 Days Roadmap — Pace Yourself Gently",
+        summary: "Islam was revealed over 23 years, not in a single night. Build steady habits step by step without overwhelming yourself.",
+        points: [
+          "Week 1 (Foundations & Rhythm): Focus on taking your time, learning basic Wudu (ablution), understanding the movements of Salah, and starting to notice the five daily prayer windows.",
+          "Week 2 (Core Recitation): Begin learning Surah Al-Fatihah and one or two short chapters (such as Surah Al-Ikhlas) with clear meaning and pronunciation.",
+          "Week 3 (Everyday Remembrance): Bring simple phrases like Bismillah, Alhamdulillah, and Insha'Allah into daily routines and try a few daily supplications.",
+          "Week 4 & Beyond (Community & Consistency): Connect with a local mosque or reliable study circle, keep a realistic daily review routine, and focus on steady growth rather than perfection."
+        ],
+        arabic: null,
+        transliteration: null,
+        translation: null,
+        note: "If you miss a step or feel tired, do not give up—consistent small efforts over months matter far more than intense bursts that burn out."
+      },
+      {
+        category: "Everyday Phrases",
+        title: "Common Islamic Phrases & When to Use Them",
+        summary: "A practical starter glossary of everyday expressions you will hear frequently in conversation, prayer, and community life.",
+        points: [
+          "Assalamu Alaykum (Peace be upon you): The standard Islamic greeting; reply with 'Wa Alaykum As-Salam wa Rahmatullah' (And upon you be peace and the mercy of Allah).",
+          "Bismillah (In the name of Allah): Said before starting meals, journeys, tasks, or Wudu to begin with mindfulness of Allah.",
+          "Alhamdulillah (All praise and thanks are due to Allah): Said when thanking Allah after eating, receiving good news, or getting through a challenge.",
+          "Insha'Allah (If Allah wills): Said when speaking about future plans, reminding yourself that outcomes rest with Allah while you still do your part.",
+          "Masha'Allah (What Allah has willed): Said to express appreciation or admiration for something good while attributing blessing to Allah.",
+          "SubhanAllah (Glory be to Allah): Said to express awe, praise Allah's perfection, or gently turn away from something inappropriate.",
+          "Astaghfirullah (I seek Allah's forgiveness): Said when asking Allah for pardon after a mistake, slip of the tongue, or moment of heedlessness.",
+          "JazakAllahu Khayran (May Allah reward you with goodness): A warm, meaningful way to thank someone for help or kindness."
+        ],
+        arabic: "السَّلَامُ عَلَيْكُمْ وَرَحْمَةُ اللَّهِ",
+        transliteration: "Assalamu Alaykum wa Rahmatullah",
+        translation: "Peace be upon you and the mercy of Allah.",
+        note: "You do not have to memorize every phrase at once—pick two or three that fit your daily routine and add more naturally over time."
+      },
+      {
+        category: "Short Surahs & Du'as",
+        title: "Starter Du'as & Short Recitations (With Transliteration)",
+        summary: "Accessible supplications and short chapters helpful for daily life, seeking guidance, and building familiarity with prayer.",
+        points: [
+          "Du'a for Beneficial Knowledge & Ease: Helpful when studying, learning about faith, or facing a difficult task.",
+          "Du'a for Guidance & Steadfastness: A classic supplication asking Allah to keep hearts firm and guided.",
+          "Surah Al-Ikhlas (Chapter 112): A short, foundational chapter affirming the pure oneness of Allah—often recited in daily prayers.",
+          "Surah Al-Falaq & An-Nas (Chapters 113–114): Short chapters seeking Allah's protection from harm, hidden troubles, and whispering doubts."
+        ],
+        arabic: "رَبِّ زِدْنِي عِلْمًا • يَا مُقَلِّبَ الْقُلُوبِ ثَبِّتْ قَلْبِي عَلَى دِينِكَ",
+        transliteration: "Rabbi zidni 'ilma  |  Ya Muqallibal-qulub, thabbit qalbi 'ala dinik",
+        translation: "My Lord, increase me in knowledge.  |  O Turner of the hearts, make my heart firm upon Your religion.",
+        note: "While learning Arabic script and pronunciation, using clear transliteration alongside meaning is a helpful bridge—keep working steadily toward reading the Arabic directly."
+      },
+      {
+        category: "Family & Friends",
+        title: "Navigating Non-Muslim Family & Friends",
+        summary: "Honoring parents and maintaining warm, respectful relationships with family and friends remains a core part of Islamic character.",
+        points: [
+          "Lead with kindness and patience: Family members may feel surprised, worried, or full of questions—give them time to process without arguing or lecturing.",
+          "Keep your manners high: Being more patient, honest, respectful, and helpful at home is often the clearest proof of positive change.",
+          "Plan practical boundaries calmly: Handle questions about diet, prayer times, or social gatherings politely and ahead of time rather than in a tense moment.",
+          "Separate disagreement from disrespect: Even if relatives disagree with your beliefs, Islam teaches honoring parents and treating family with care and dignity."
+        ],
+        arabic: null,
+        transliteration: null,
+        translation: null,
+        note: "You do not need to have the answer to every theological question on day one—it is completely fine to say, 'That's a good question, let me look into it properly.'"
+      },
+      {
+        category: "Culture vs. Islam",
+        title: "Culture vs. Islam — Avoiding Unnecessary Pressure",
+        summary: "Muslims come from many cultures around the world; learn to tell authentic Islamic teachings apart from local customs or personal opinions.",
+        points: [
+          "Not every cultural habit is a religious rule: Dress styles, wedding customs, family traditions, and social etiquette vary widely across Muslim-majority countries.",
+          "Watch out for 'all-or-nothing' pressure: New Muslims sometimes receive strict or conflicting advice from well-meaning people—always ask for evidence from the Qur'an and authentic Sunnah.",
+          "Keep your core priorities clear: Focus first on Tawhid, the five daily prayers, honesty, good character, and avoiding major harms rather than getting tangled in minor debates.",
+          "Seek balanced, trustworthy guidance: Look for teachers and resources known for clarity, compassion, and adherence to established scholarship."
+        ],
+        arabic: null,
+        transliteration: null,
+        translation: null,
+        note: "Religion is meant to bring clarity, sincerity, and balanced discipline—not guilt over cultural expectations that Islam itself does not impose."
+      },
+      {
+        category: "Daily Life & Fiqh",
+        title: "Practical Daily Life — Prayer Times, Food & Wudu Basics",
+        summary: "Simple day-to-day essentials so you can handle routine situations with confidence and ease.",
+        points: [
+          "Prayer times & Qiblah: Use a reliable local prayer-time app or mosque timetable for your city, and check the Qiblah direction toward Makkah before starting Salah.",
+          "Food & dietary basics: Avoid alcohol/intoxicants and pork; when buying meat or checking packaged foods, look for clear halal certification or check ingredients like gelatin and alcohol extracts.",
+          "What invalidates Wudu: Using the restroom, passing gas, deep sleep where awareness is lost, or anything else established in basic Fiqh—simply repeat Wudu calmly when needed.",
+          "Mistakes in prayer: If you forget a small detail or lose track while learning, don't panic—keep learning the core steps and look up simple rulings for forgetfulness (sujud as-sahw) as you go."
+        ],
+        arabic: null,
+        transliteration: null,
+        translation: null,
+        note: "Islamic law includes built-in ease and exemptions (such as during travel or illness)—whenever in doubt, learn the core ruling calmly rather than guessing."
+      }
+    ];
+
+    // ==========================================
+    // 6. DATA: KNOWLEDGE TRIVIA
     // ==========================================
     const triviaData = [
       {
@@ -700,7 +1253,7 @@
     ];
 
     // ==========================================
-    // 4. DATA: ROTATING FOOTER DU'A LIST
+    // 7. DATA: ROTATING FOOTER DU'A LIST
     // ==========================================
     const footerDuas = [
       "O Allah, grant us beneficial knowledge, sincere action, and steady clarity of heart.",
@@ -713,13 +1266,20 @@
     let lastDuaIndex = -1;
 
     // ==========================================
-    // 5. APP LOGIC (TABS, THEME, FAQ, DA'WAH, TRIVIA, DU'A)
+    // 8. APP LOGIC
     // ==========================================
     let selectedCategory = "All";
     let selectedDawahCategory = "All";
+    let selectedPrayStage = "All";
+    let selectedHifzCategory = "All";
+    let selectedRevertCategory = "All";
     let currentQuestion = 0;
     let score = 0;
     let answered = false;
+
+    function escapeJsAttr(str) {
+      return String(str).replace(/\\/g, "\\\\").replace(/'/g, "\\'");
+    }
 
     function renderFooterDua() {
       const duaEl = document.getElementById("footerDua");
@@ -751,11 +1311,12 @@
       renderFooterDua();
     }
 
+    // --- FAQ ---
     function renderCategoryPills() {
       const categories = ["All", ...new Set(faqData.map(item => item.category))];
       const container = document.getElementById("categoryPills");
       container.innerHTML = categories.map(cat => `
-        <button class="pill ${cat === selectedCategory ? 'active' : ''}" onclick="setCategory('${cat}')">${cat}</button>
+        <button class="pill ${cat === selectedCategory ? 'active' : ''}" onclick="setCategory('${escapeJsAttr(cat)}')">${cat}</button>
       `).join("");
     }
 
@@ -804,7 +1365,7 @@
               <div class="evidence-text">"${item.hadith.text}"</div>
               <div class="evidence-ref">— ${item.hadith.ref}</div>
             </div>
-            <p class="context-note"><strong>Historical & Linguistic Note:</strong> ${item.context}</p>
+            <p class="context-note"><strong>Historical &amp; Linguistic Note:</strong> ${item.context}</p>
           </div>
         </div>
       `).join("");
@@ -817,11 +1378,12 @@
       icon.textContent = card.classList.contains("open") ? "−" : "+";
     }
 
+    // --- DA'WAH ---
     function renderDawahCategoryPills() {
       const categories = ["All", ...new Set(dawahData.map(item => item.category))];
       const container = document.getElementById("dawahCategoryPills");
       container.innerHTML = categories.map(cat => `
-        <button class="pill ${cat === selectedDawahCategory ? 'active' : ''}" onclick="setDawahCategory('${cat.replace(/'/g, "\\'")}')">${cat}</button>
+        <button class="pill ${cat === selectedDawahCategory ? 'active' : ''}" onclick="setDawahCategory('${escapeJsAttr(cat)}')">${cat}</button>
       `).join("");
     }
 
@@ -885,6 +1447,257 @@
       icon.textContent = card.classList.contains("open") ? "−" : "+";
     }
 
+    // --- HOW TO PRAY ---
+    function renderPrayerCategoryPills() {
+      const stages = ["All", ...new Set(prayerSteps.map(item => item.stage))];
+      const container = document.getElementById("prayFilterPills");
+      if (!container) return;
+      container.innerHTML = stages.map(st => `
+        <button class="pill ${st === selectedPrayStage ? 'active' : ''}" onclick="setPrayStage('${escapeJsAttr(st)}')">${st}</button>
+      `).join("");
+    }
+
+    function setPrayStage(st) {
+      selectedPrayStage = st;
+      renderPrayerCategoryPills();
+      renderPrayerGuide();
+    }
+
+    function renderPrayerGuide() {
+      const list = document.getElementById("prayList");
+      if (!list) return;
+
+      const filtered = prayerSteps.filter(item =>
+        selectedPrayStage === "All" || item.stage === selectedPrayStage
+      );
+
+      list.innerHTML = filtered.map((item, idx) => `
+        <div class="dawah-card open" id="pray-card-${idx}">
+          <div class="dawah-header" onclick="togglePrayCard(${idx})">
+            <div>
+              <span class="badge">${item.stage}</span>
+              <div class="dawah-title">${item.title}</div>
+              <p class="dawah-summary">${item.summary}</p>
+            </div>
+            <span class="toggle-icon" id="pray-icon-${idx}">−</span>
+          </div>
+          <div class="dawah-details">
+            <div class="wisdom-block">
+              <div class="wisdom-label">Step-by-Step Guide</div>
+              ${item.details.map(step => `<p>• ${step}</p>`).join("")}
+            </div>
+            <div class="evidence-block" style="margin-bottom: 0;">
+              <div class="evidence-label">Key Phrase / Recitation</div>
+              <div style="font-size: 1.25rem; font-weight: 700; margin: 0.25rem 0;">${item.arabic}</div>
+              <div class="evidence-text">${item.transliteration}</div>
+              <div class="evidence-ref">${item.translation}</div>
+            </div>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function togglePrayCard(idx) {
+      const card = document.getElementById(`pray-card-${idx}`);
+      const icon = document.getElementById(`pray-icon-${idx}`);
+      card.classList.toggle("open");
+      icon.textContent = card.classList.contains("open") ? "−" : "+";
+    }
+
+    // --- MEMORIZE QUR'AN ---
+    function renderHifzCategoryPills() {
+      const categories = ["All", ...new Set(hifzGuides.map(item => item.category))];
+      const container = document.getElementById("hifzFilterPills");
+      if (!container) return;
+      container.innerHTML = categories.map(cat => `
+        <button class="pill ${cat === selectedHifzCategory ? 'active' : ''}" onclick="setHifzCategory('${escapeJsAttr(cat)}')">${cat}</button>
+      `).join("");
+    }
+
+    function setHifzCategory(cat) {
+      selectedHifzCategory = cat;
+      renderHifzCategoryPills();
+      renderHifzGuides();
+    }
+
+    function renderHifzGuides() {
+      const list = document.getElementById("hifzList");
+      if (!list) return;
+
+      const filtered = hifzGuides.filter(item =>
+        selectedHifzCategory === "All" || item.category === selectedHifzCategory
+      );
+
+      list.innerHTML = filtered.map((item, idx) => `
+        <div class="dawah-card open" id="hifz-card-${idx}">
+          <div class="dawah-header" onclick="toggleHifzCard(${idx})">
+            <div>
+              <span class="badge">${item.category}</span>
+              <div class="dawah-title">${item.title}</div>
+              <p class="dawah-summary">${item.summary}</p>
+            </div>
+            <span class="toggle-icon" id="hifz-icon-${idx}">−</span>
+          </div>
+          <div class="dawah-details">
+            <div class="wisdom-block">
+              <div class="wisdom-label">Practical Steps</div>
+              ${item.steps.map(step => `<p>• ${step}</p>`).join("")}
+            </div>
+            <p class="context-note"><strong>Helpful Tip:</strong> ${item.tip}</p>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function toggleHifzCard(idx) {
+      const card = document.getElementById(`hifz-card-${idx}`);
+      const icon = document.getElementById(`hifz-icon-${idx}`);
+      card.classList.toggle("open");
+      icon.textContent = card.classList.contains("open") ? "−" : "+";
+    }
+
+    function updateHifzProgress() {
+      const ids = ["hifzStep1", "hifzStep2", "hifzStep3", "hifzStep4"];
+      const done = ids.filter(id => {
+        const el = document.getElementById(id);
+        return el && el.checked;
+      }).length;
+
+      const statusEl = document.getElementById("hifzProgressText");
+      if (statusEl) {
+        statusEl.textContent = `${done} of ${ids.length} steps completed today`;
+      }
+    }
+
+    function generateRecallPrompt() {
+      const out = document.getElementById("recallPromptOutput");
+      if (!out || !recallPrompts.length) return;
+      const idx = Math.floor(Math.random() * recallPrompts.length);
+      out.textContent = recallPrompts[idx];
+    }
+
+    function toggleSurahDirectory() {
+      const body = document.getElementById("surahDirBody");
+      const icon = document.getElementById("surahDirIcon");
+      const isHidden = body.style.display === "none";
+      body.style.display = isHidden ? "block" : "none";
+      icon.textContent = isHidden ? "−" : "+";
+    }
+
+    function renderSurahLinks() {
+      const grid = document.getElementById("surahLinksGrid");
+      const searchEl = document.getElementById("surahSearchInput");
+      if (!grid) return;
+
+      const query = searchEl ? searchEl.value.trim().toLowerCase() : "";
+
+      const items = surahNames
+        .map((name, idx) => ({ num: idx + 1, name }))
+        .filter(s =>
+          String(s.num).includes(query) ||
+          s.name.toLowerCase().includes(query)
+        );
+
+      if (items.length === 0) {
+        grid.innerHTML = `<div class="empty-state" style="grid-column: 1 / -1;">No matching Surah found.</div>`;
+        return;
+      }
+
+      grid.innerHTML = items.map(s => `
+        <a
+          href="https://quran.com/${s.num}"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="surah-link"
+        >
+          <span><span class="surah-num">${s.num}.</span>${s.name}</span>
+          <span class="surah-arrow">↗</span>
+        </a>
+      `).join("");
+    }
+
+    // --- NEW MUSLIM GUIDE ---
+    function renderRevertCategoryPills() {
+      const categories = ["All", ...new Set(revertGuideData.map(item => item.category))];
+      const container = document.getElementById("revertFilterPills");
+      if (!container) return;
+      container.innerHTML = categories.map(cat => `
+        <button class="pill ${cat === selectedRevertCategory ? 'active' : ''}" onclick="setRevertCategory('${escapeJsAttr(cat)}')">${cat}</button>
+      `).join("");
+    }
+
+    function setRevertCategory(cat) {
+      selectedRevertCategory = cat;
+      renderRevertCategoryPills();
+      renderRevertGuide();
+    }
+
+    function renderRevertGuide() {
+      const list = document.getElementById("revertList");
+      const searchEl = document.getElementById("revertSearchInput");
+      if (!list) return;
+
+      const query = searchEl ? searchEl.value.trim().toLowerCase() : "";
+
+      const filtered = revertGuideData.filter(item => {
+        const matchesCat = selectedRevertCategory === "All" || item.category === selectedRevertCategory;
+        const pointsText = (item.points || []).join(" ");
+        const matchesText =
+          item.title.toLowerCase().includes(query) ||
+          item.summary.toLowerCase().includes(query) ||
+          pointsText.toLowerCase().includes(query) ||
+          (item.transliteration || "").toLowerCase().includes(query) ||
+          (item.translation || "").toLowerCase().includes(query) ||
+          (item.note || "").toLowerCase().includes(query);
+        return matchesCat && matchesText;
+      });
+
+      if (filtered.length === 0) {
+        list.innerHTML = `<div class="empty-state">No matching guide topics found. Try clearing your search filter.</div>`;
+        return;
+      }
+
+      list.innerHTML = filtered.map((item, idx) => {
+        const phraseBlock = item.arabic ? `
+          <div class="evidence-block" style="margin-top: 0.75rem; margin-bottom: 0;">
+            <div class="evidence-label">Key Phrase / Supplication</div>
+            <div style="font-size: 1.2rem; font-weight: 700; margin: 0.25rem 0;">${item.arabic}</div>
+            ${item.transliteration ? `<div class="evidence-text">${item.transliteration}</div>` : ""}
+            ${item.translation ? `<div class="evidence-ref">${item.translation}</div>` : ""}
+          </div>
+        ` : "";
+
+        return `
+          <div class="dawah-card open" id="revert-card-${idx}">
+            <div class="dawah-header" onclick="toggleRevertCard(${idx})">
+              <div>
+                <span class="badge">${item.category}</span>
+                <div class="dawah-title">${item.title}</div>
+                <p class="dawah-summary">${item.summary}</p>
+              </div>
+              <span class="toggle-icon" id="revert-icon-${idx}">−</span>
+            </div>
+            <div class="dawah-details">
+              <div class="wisdom-block" style="margin-bottom: 0;">
+                <div class="wisdom-label">Key Guidance</div>
+                ${item.points.map(pt => `<p>• ${pt}</p>`).join("")}
+              </div>
+              ${phraseBlock}
+              ${item.note ? `<p class="context-note"><strong>Note:</strong> ${item.note}</p>` : ""}
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function toggleRevertCard(idx) {
+      const card = document.getElementById(`revert-card-${idx}`);
+      const icon = document.getElementById(`revert-icon-${idx}`);
+      card.classList.toggle("open");
+      icon.textContent = card.classList.contains("open") ? "−" : "+";
+    }
+
+    // --- TRIVIA ---
     function renderTrivia() {
       const container = document.getElementById("triviaContainer");
 
@@ -963,6 +1776,13 @@
     renderFAQs();
     renderDawahCategoryPills();
     renderDawah();
+    renderPrayerCategoryPills();
+    renderPrayerGuide();
+    renderHifzCategoryPills();
+    renderHifzGuides();
+    renderSurahLinks();
+    renderRevertCategoryPills();
+    renderRevertGuide();
     renderTrivia();
     renderFooterDua();
   </script>
